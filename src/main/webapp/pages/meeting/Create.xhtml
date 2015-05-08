@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MeetingCreateDlg" widgetVar="MeetingCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.CreateMeetingTitle}">
+            <h:form id="MeetingCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{meetingController.selected != null}">
+                        <p:outputLabel value="#{text.LeadershipType}" for="leadership" />
+                        <p:selectOneMenu id="leadership" value="#{meetingController.selected.leadership}">
+                            <f:selectItems value="#{meetingController.leaderships}" var="leadership" itemLabel="#{leadership.leadershipType.type} #{leadership.number}"  />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.CreateMeetingLabel_number}" for="number" />
+                        <p:inputText id="number" value="#{meetingController.selected.number}" title="#{text.CreateMeetingTitle_number}" />
+                        <p:outputLabel value="#{text.CreateMeetingLabel_description}" for="description" />
+                        <p:inputText id="description" value="#{meetingController.selected.description}" title="#{text.CreateMeetingTitle_description}" />
+                        <p:outputLabel value="#{text.dayOf}" for="dayOf" />
+                        <p:calendar id="dayOf" pattern="dd.MM.yyyy"  mask="true" value="#{meetingController.selected.dayOf}" title="#{text.dayOf}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{meetingController.create}" value="#{text.Save}" update="display,:MeetingListForm:datalist,:growl" oncomplete="handleSubmit(args,'MeetingCreateDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="MeetingCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

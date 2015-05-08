@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReportTypeCreateDlg" widgetVar="ReportTypeCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.create}">
+            <h:form id="ReportTypeCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{reportTypeController.selected != null}">
+                        <p:outputLabel value="#{text.create}" for="type" />
+                        <p:inputText id="type" value="#{reportTypeController.selected.type}" title="#{text.create}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{reportTypeController.create}" value="#{text.Save}" update="display,:ReportTypeListForm:datalist,:growl" oncomplete="handleSubmit(args,'ReportTypeCreateDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="ReportTypeCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+        
+    
+    <h:head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+        <f:loadBundle basename="/langs/i18n" var="text" />
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="6000" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="65" header="#{text.AppName}">
+                <h:form id="menuForm">
+                    <p:menubar>
+                        <p:menuitem value="#{text.menuHome}" outcome="/index" icon="ui-icon-home"/>
+                        <p:submenu label="#{text.menuDefinitions}">
+                            <p:menuitem value="#{text.menuLeadershipTypes}" outcome="/pages/leadershipType/List.xhtml" />
+                            <p:menuitem value="#{text.menuReportTypes}" outcome="/pages/reportType/List.xhtml" />
+                            <p:menuitem value="#{text.menuAssociationMember}" outcome="/pages/associationMember/List.xhtml" />
+                            <p:menuitem value="#{text.menuMembersHistory}" outcome="/pages/membershiphistory/List.xhtml" />
+                            <p:menuitem value="#{text.menuAssociationLeaderships}" outcome="/pages/leadership/List.xhtml" />
+                            <p:menuitem value="#{text.menuIncomeTo}" outcome="/pages/incometo/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="#{text.menuManagment}">
+                            <p:menuitem value="#{text.menuMeetings}" outcome="/pages/meeting/List.xhtml" />
+                            <p:menuitem value="#{text.menuResolutions}" outcome="/pages/resolution/List.xhtml" />
+                            <p:menuitem value="#{text.menuReports}" outcome="/pages/report/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="#{text.menuOrganize}">
+                            <p:menuitem value="#{text.menuEvents}" outcome="/pages/event/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="#{text.menuFinance}">
+                            <p:menuitem value="#{text.balance}" outcome="/pages/balance/List.xhtml" />
+                            <p:menuitem value="#{text.balanceEvents}" outcome="/pages/balanceevent/List.xhtml" />
+                            <p:menuitem value="#{text.balanceTerms}" outcome="/pages/balanceterm/List.xhtml" />
+                        </p:submenu>
+                        <p:menuitem value="#{text.menuReports}" outcome="/pages/jasperreports/List.xhtml" />
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="60">
+                <ui:insert name="footer"/>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+</html>

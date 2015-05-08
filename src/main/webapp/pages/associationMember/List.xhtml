@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{text.ListAssociationMemberTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="AssociationMemberListForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <p:panel header="#{text.ListAssociationMemberTitle}">
+                    <p:dataTable id="datalist" value="#{associationMemberController.items}" var="item"
+                                 selectionMode="single" selection="#{associationMemberController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column style="width:16px">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.firstName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.lastName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.lastName}"/>
+                        </p:column>
+                        <p:rowExpansion>                            
+                            <p:dataTable id="membershiphistorylist" 
+                                         value="#{associationMemberController.selected.membershiphistorys}" 
+                                         var="hist" 
+                                         selectionMode="single" 
+                                         rowKey="hist.id">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{text.DateFrom}" />
+                                    </f:facet>
+                                    <p:calendar id="calendarfrom" value="#{hist.datefrom}" showOn="calendarfrom" />
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{text.DateTo}" />
+                                    </f:facet>
+                                    <p:calendar id="calendarto" value="#{hist.dateto}" showOn="calendarto" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:rowExpansion>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{text.create}" actionListener="#{associationMemberController.prepareCreate}" update=":AssociationMemberCreateForm" oncomplete="PF('AssociationMemberCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{text.View}" update=":AssociationMemberViewForm" oncomplete="PF('AssociationMemberViewDialog').show()" disabled="#{empty associationMemberController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{text.Edit}" update=":AssociationMemberEditForm" oncomplete="PF('AssociationMemberEditDialog').show()" disabled="#{empty associationMemberController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{text.Delete}" actionListener="#{associationMemberController.destroy}" update=":growl,datalist" disabled="#{empty associationMemberController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

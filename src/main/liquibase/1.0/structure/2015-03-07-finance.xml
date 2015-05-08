@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+                   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                   xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+  
+    <changeSet id="001" author="mbzowski">
+        <createTable tableName="balance">
+            <column name="id" type="BIGINT"/>
+            <column name="incomingdate" type="date" />
+            <column name="balanceevent_id" type="BIGINT"  />
+            <column name="balanceterm_id" type="BIGINT" />
+            <column name="amount" type="NUMBER(19,2)" />
+            <column name="accountbalance" type="NUMBER(19,2)" />
+            <column name="member_id" type="BIGINT" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="002" author="mbzowski">
+        <createTable tableName="balanceevent">
+            <column name="id" type="BIGINT" />
+            <column name="eventname" type="VARCHAR(50)" />
+        </createTable>
+    </changeSet>
+    
+        
+    <changeSet id="003" author="mbzowski">
+        <createTable tableName="balanceterm">
+            <column name="id" type="BIGINT" />
+            <column name="termname" type="VARCHAR(50)" />
+            <column name="datefrom" type="DATE" />
+            <column name="dateto" type="DATE" />
+        </createTable>
+    </changeSet>
+           
+    <changeSet id="005" author="mbzowski">
+        <addNotNullConstraint tableName="balance" 
+                              columnName="incomingdate"
+                              columnDataType="DATE"    />
+    </changeSet>
+    
+    <changeSet id="006" author="mbzowski">
+        <addNotNullConstraint tableName="balance" 
+                              columnName="balanceevent_id"
+                              columnDataType="BIGINT"        />
+    </changeSet>
+    
+    <changeSet id="007" author="mbzowski">
+        <addNotNullConstraint tableName="balance" 
+                              columnName="balanceterm_id" 
+                              columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="008" author="mbzowski">
+        <addNotNullConstraint tableName="balance" 
+                              columnName="amount" 
+                              columnDataType="NUMBER(19,2)"        />
+    </changeSet>
+    
+    <changeSet id="009" author="mbzowski">
+        <addNotNullConstraint tableName="balance" 
+                              columnName="accountbalance"
+                              columnDataType="NUMBER(19,2)"        />
+    </changeSet>
+    
+    <changeSet id="010" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="balance" 
+                                 baseColumnNames="member_id" 
+                                 constraintName="fk_balance_member" 
+                                 referencedTableName="associationmember" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+    <changeSet id="011" author="mbzowski">
+        <addPrimaryKey tableName="balance" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="012" author="mbzowski">
+        <addAutoIncrement tableName="balance" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+      
+    <changeSet id="013" author="mbzowski">
+        <addPrimaryKey tableName="balanceevent" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="014" author="mbzowski">
+        <addAutoIncrement tableName="balanceevent" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+      
+    <changeSet id="015" author="mbzowski">
+        <addPrimaryKey tableName="balanceterm" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="016" author="mbzowski">
+        <addAutoIncrement tableName="balanceterm" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+    <!--    <changeSet id="017" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="balance" 
+                                 baseColumnNames="balanceevent_id" 
+                                 constraintName="fk_balance_balance_event" 
+                                 referencedTableName="balance_event"
+                                 referencedColumnNames="id" />
+    </changeSet>-->
+       
+    <changeSet id="019" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="balance" 
+                                 baseColumnNames="balanceterm_id" 
+                                 constraintName="fk_balance_balance_term" 
+                                 referencedTableName="balanceterm" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+    <changeSet id="021" author="mbzowski" >
+        <addNotNullConstraint tableName="balanceevent" 
+                              columnName="eventname"
+                              columnDataType="BIGINT"        />
+    </changeSet>
+     
+    <changeSet id="022" author="mbzowski" >
+        <addNotNullConstraint tableName="balanceterm" 
+                              columnName="termname"
+                              columnDataType="VARCHAR(50)"        />
+    </changeSet>
+    
+    <changeSet id="023" author="mbzowski" >
+        <addNotNullConstraint tableName="balanceterm" 
+                              columnName="datefrom" 
+                              columnDataType="DATE"/>
+    </changeSet>
+    
+    <changeSet id="024" author="mbzowski" >
+        <addNotNullConstraint tableName="balanceterm" 
+                              columnName="dateto" 
+                              columnDataType="DATE"/>
+    </changeSet>
+    
+    <changeSet id="025" author="mbzowski">
+        <dropNotNullConstraint tableName="balanceevent" 
+                                    columnName="eventname"
+                                    columnDataType="BIGINT"      />
+    </changeSet>
+    
+    <changeSet id="026" author="mbzowski">
+        <modifyDataType tableName="balanceevent" 
+                        columnName="eventname" 
+                        newDataType="VARCHAR(50)" />
+    </changeSet>
+    
+    <changeSet id="027" author="mbzowski">
+        <addNotNullConstraint tableName="balanceevent" 
+                              columnName="eventname"
+                              columnDataType="VARCHAR(50)"        />
+    </changeSet>
+    
+    <changeSet id="028" author="mbzowski">
+        <addColumn tableName="balance" >
+            <column name="incometo_id" type="BIGINT" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="029" author="mbzowski">
+        <createTable tableName="incometo" >
+            <column name="id" type="BIGINT" />
+            <column name="title" type="VARCHAR(50)" />
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="030" author="mbzowski">
+        <addPrimaryKey tableName="incometo" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="031" author="mbzowski">
+        <addAutoIncrement tableName="incometo" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+    <changeSet id="032" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="balance" 
+                                 baseColumnNames="balanceevent_id" 
+                                 constraintName="fk_balance_balanceevent" 
+                                 referencedTableName="balanceevent" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+        
+    <changeSet id="033" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="balance" 
+                                 baseColumnNames="incometo_id" 
+                                 constraintName="fk_balance_incometo" 
+                                 referencedTableName="incometo" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+    <changeSet id="034" author="mbzowski">
+       <dropNotNullConstraint tableName="balance" columnName="accountbalance" columnDataType="NUMBER(19,2)" />
+    </changeSet>
+    
+    <changeSet id="035" author="mbzowski">
+        <dropColumn tableName="balance" columnName="accountbalance" />
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="content" />
+        <cc:attribute name="saveListener" method-signature="void saveListener()" />
+        <cc:attribute name="associationMember" />
+        <cc:attribute name="associationMembers" />
+        <cc:attribute name="myattributeUpdatedEventListener"
+                      method-signature="void changeMember(javax.faces.event.AjaxBehaviorEvent)"
+                      required="true" 
+                      targets="selectOneMember"
+                      />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:form id="CKEditorForm">
+        	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <p:growl id="editorgrowl" showDetail="true"  /> 
+            <p:dialog id="editorDialog"  widgetVar="CKEditor">
+                <p:selectOneMenu	id="selectOneMember" 
+                					value="#{cc.attrs.associationMember}" 
+                					>
+                    <f:selectItems	value="#{cc.attrs.associationMembers}" 
+                    				var="member" 
+                    				itemLabel="#{member.firstName} #{member.lastName}"  />
+                    <p:ajax event="change" listener="#{cc.attrs.myattributeUpdatedEventListener}"  />
+                </p:selectOneMenu>
+                <pe:ckEditor id="CKEditor" value="#{cc.attrs.content}" >  
+                    <p:ajax event="save" 
+                    		listener="#{cc.attrs.saveListener}" 
+                    		update="editorgrowl"/>  
+                </pe:ckEditor>  
+            </p:dialog>
+        </h:form>
+    </cc:implementation>
+</html>

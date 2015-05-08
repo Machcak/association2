@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+  
+    <changeSet id="001" author="mbzowski">
+        <createTable tableName="leadershiptype">
+            <column name="id" type="BIGINT"/>
+            <column name="type" type="varchar(50)" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="002" author="mbzowski">
+        <addPrimaryKey tableName="leadershiptype" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="003" author="mbzowski">
+        <addAutoIncrement tableName="leadershiptype" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+    <changeSet id="004" author="mbzowski">
+        <update tableName="leadership" >
+            <column name="type" />
+        </update>
+    </changeSet>
+    
+    <changeSet id="005" author="mbzowski">
+        <modifyDataType tableName="leadership" columnName="type" newDataType="bigint" />
+    </changeSet>
+        
+    <changeSet id="006" author="mbzowski" >
+        <renameColumn tableName="leadership" 
+                      oldColumnName="type" 
+                      newColumnName="leadershiptype_id" 
+                      columnDataType="bigint" />
+    </changeSet>
+    
+    <changeSet id="007" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="leadership" 
+                                 baseColumnNames="leadershiptype_id" 
+                                 constraintName="fk_leadershiptype_leadership" 
+                                 referencedTableName="leadershiptype" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+   
+</databaseChangeLog>

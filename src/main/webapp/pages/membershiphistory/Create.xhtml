@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MembershiphistoryCreateDlg" widgetVar="MembershiphistoryCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{i18n.CreateMembershiphistoryTitle}">
+            <h:form id="MembershiphistoryCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{membershiphistoryController.selected != null}">
+                        <p:outputLabel value="#{i18n.CreateMembershiphistoryLabel_datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{membershiphistoryController.selected.datefrom}" title="#{i18n.EditMembershiphistoryTitle_datefrom}" required="true" requiredMessage="#{i18n.EditMembershiphistoryRequiredMessage_datefrom}" showOn="button"/>
+                        <p:outputLabel value="#{i18n.CreateMembershiphistoryLabel_dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{membershiphistoryController.selected.dateto}" title="#{i18n.EditMembershiphistoryTitle_dateto}"  showOn="button"/>
+                        <p:outputLabel value="#{i18n.CreateMembershiphistoryLabel_member}" for="member" />
+                        <p:selectOneMenu id="member" value="#{membershiphistoryController.selected.member}" >
+                            <f:selectItems value="#{associationMemberController.itemsAvailableSelectOne}"
+                                           var="memberItem"
+                                           itemValue="#{memberItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{membershiphistoryController.create}" value="#{i18n.Save}" update="display,:MembershiphistoryListForm:datalist,:growl" oncomplete="handleSubmit(args,'MembershiphistoryCreateDialog');"/>
+                    <p:commandButton value="#{i18n.Cancel}" onclick="MembershiphistoryCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

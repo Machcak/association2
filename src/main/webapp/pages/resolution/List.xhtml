@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:machcak="http://xmlns.jcp.org/jsf/composite/machcak">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{text.resolution}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+                <h:form id="ResolutionListForm">
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <p:panel header="#{text.resolution}">
+                        <p:dataTable id="datalist" value="#{resolutionController.items}" var="item"
+                            selectionMode="single" selection="#{resolutionController.selected}"
+                            paginator="true"
+                            rowKey="#{item.id}"
+                            rows="10"
+                            rowsPerPageTemplate="10,20,30,40,50"
+                            >
+
+                            <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton resolutionButton"/>
+                            <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton resolutionButton"/>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_number}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.number}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_content}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.content}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_dayOfResolution}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dayOfResolution}">
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                            	<f:facet name="header">
+                            		<h:outputText value="#{text.Leadership}" />
+                            	</f:facet>
+                            	<h:outputText value="#{item.leadership.leadershipType.type} #{item.leadership.number}" />
+                            </p:column>
+							<p:column>
+                            	<f:facet name="header">
+                            		<h:outputText value="#{text.meeting}" />
+                            	</f:facet>
+                            	<h:outputText value="#{item.meeting.description}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{text.create}" actionListener="#{resolutionController.prepareCreate}" update=":ResolutionCreateForm" oncomplete="PF('ResolutionCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{text.View}" update=":ResolutionViewForm" oncomplete="PF('ResolutionViewDialog').show()" disabled="#{empty resolutionController.selected}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{text.Edit}" update=":ResolutionEditForm" oncomplete="PF('ResolutionEditDialog').show()" disabled="#{empty resolutionController.selected}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{text.Delete}" actionListener="#{resolutionController.destroy}" update=":growl,datalist" disabled="#{empty resolutionController.selected}"/>
+                                <p:commandButton id="resolutionButton" 
+                                                 icon="ui-icon-plus" 
+                                                 value="#{text.editResolutionContent}" 
+                                                 update=":#{p:component('CKEditorWithoutAssociationMemberForm')}" 
+                                                 oncomplete="PF('CKEditor').show()"
+                                                 disabled="#{empty resolutionController.selected}" />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            <machcak:CKEditorWithoutAssociationMember content="#{resolutionController.resolutionContent}" 
+                                                      saveListener="#{resolutionController.resoluionContentSaveListener}" />
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>

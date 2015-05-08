@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LeadershipCreateDlg" widgetVar="LeadershipCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.create}">
+            <h:form id="LeadershipCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{leadershipController.selected != null}">
+                        <p:outputLabel value="#{text.leadership_type}" for="type" />
+                        <p:selectOneMenu id="type" value="#{leadershipController.selected.leadershipType}" >
+                            <f:selectItems value="#{leadershipController.leadershipTypes}" var="type" itemLabel="#{type.type}"  />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.leadership_term_number}" for="number" />
+                        <p:inputText id="number" value="#{leadershipController.selected.number}" title="#{text.CreateLeadershipTitle_number}" />
+                        <p:outputLabel value="#{text.since}" for="since" />
+                        <p:calendar id="since" pattern="dd.MM.yyyy" mask="true" value="#{leadershipController.selected.since}" title="#{text.EditLeadershipTitle_since}"  showOn="button"/>
+                        <p:outputLabel value="#{text.continues_to}" for="continuesTo" />
+                        <p:calendar id="continuesTo" pattern="dd.MM.yyyy" mask="true" value="#{leadershipController.selected.continuesTo}" title="#{text.EditLeadershipTitle_continuesTo}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{leadershipController.create}" value="#{text.Save}" update="display,:LeadershipListForm:datalist,:growl" oncomplete="handleSubmit(args,'LeadershipCreateDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="LeadershipCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

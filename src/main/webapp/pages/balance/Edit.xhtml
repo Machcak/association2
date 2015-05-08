@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BalanceEditDlg" widgetVar="BalanceEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.EditBalanceTitle}">
+            <h:form id="BalanceEditForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{balanceController.selected != null}">
+                        <p:outputLabel value="#{text.EditBalanceLabel_incomingdate}" for="incomingdate" />
+                        <p:calendar id="incomingdate" pattern="dd.MM.yyyy" mask="true" value="#{balanceController.selected.incomingdate}" title="#{text.EditBalanceTitle_incomingdate}" required="true" requiredMessage="#{text.EditBalanceRequiredMessage_incomingdate}" showOn="button"/>
+                        <p:outputLabel value="#{text.EditBalanceLabel_amount}" for="amount" />
+                        <p:inputText id="amount" value="#{balanceController.selected.amount}" title="#{text.EditBalanceTitle_amount}" required="true" requiredMessage="#{text.EditBalanceRequiredMessage_amount}"/>
+                        <p:outputLabel value="#{text.EditBalanceLabel_incometo}" for="incometo" />
+                        <p:selectOneMenu id="incometo" value="#{balanceController.selected.incometo}" >
+                            <f:selectItem itemLabel="#{text.SelectOneMessage}"/>
+                            <f:selectItems value="#{incometoController.itemsAvailableSelectOne}"
+                                           var="incometoItem"
+                                           itemValue="#{incometoItem}"
+                                           itemLabel="#{incometoItem.title}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.EditBalanceLabel_balanceevent}" for="balanceevent" />
+                        <p:selectOneMenu id="balanceevent" value="#{balanceController.selected.balanceevent}" required="true" requiredMessage="#{text.EditBalanceRequiredMessage_balanceevent}">
+                            <f:selectItem itemLabel="#{text.SelectOneMessage}"/>
+                            <f:selectItems value="#{balanceeventController.itemsAvailableSelectOne}"
+                                           var="balanceeventItem"
+                                           itemValue="#{balanceeventItem}"
+                                           itemLabel="#{balanceeventItem.eventname}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.EditBalanceLabel_balanceterm}" for="balanceterm" />
+                        <p:selectOneMenu id="balanceterm" value="#{balanceController.selected.balanceterm}" required="true" requiredMessage="#{text.EditBalanceRequiredMessage_balanceterm}">
+                            <f:selectItem itemLabel="#{text.SelectOneMessage}"/>
+                            <f:selectItems value="#{balancetermController.itemsAvailableSelectOne}"
+                                           var="balancetermItem"
+                                           itemValue="#{balancetermItem}"
+                                           itemLabel="#{balancetermItem.termname}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.EditBalanceLabel_associationmember}" for="associationmember" />
+                        <p:selectOneMenu id="associationmember" value="#{balanceController.selected.associationMember}" >
+                              <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItems value="#{associationMemberController.itemsAvailableSelectOne}"
+                                           var="associationMemberItem"
+                                           itemValue="#{associationMemberItem}"
+                                           itemLabel="#{associationMemberItem.lastName} #{associationMemberItem.firstName}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.Description}" for="balancedescription" />
+                        <p:inputTextarea id="balancedescription" rows="6" cols="33" value="#{balanceController.selected.description}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{balanceController.update}" value="#{text.Save}" update="display,:BalanceListForm:datalist,:growl" oncomplete="handleSubmit(args, 'BalanceEditDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="BalanceEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

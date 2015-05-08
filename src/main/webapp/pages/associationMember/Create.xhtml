@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AssociationMemberCreateDlg" widgetVar="AssociationMemberCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.create}">
+            <h:form id="AssociationMemberCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{associationMemberController.selected != null}">
+                        <p:outputLabel value="#{text.firstName}" for="firstName" />
+                        <p:inputText id="firstName" value="#{associationMemberController.selected.firstName}" title="#{text.firstName}" />
+                        <p:outputLabel value="#{text.lastName}" for="lastName" />
+                        <p:inputText id="lastName" value="#{associationMemberController.selected.lastName}" title="#{text.lastName}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{associationMemberController.create}" value="#{text.save}" update="display,:AssociationMemberListForm:datalist,:growl" oncomplete="handleSubmit(args,'AssociationMemberCreateDialog');"/>
+                    <p:commandButton value="#{text.cancel}" onclick="AssociationMemberCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

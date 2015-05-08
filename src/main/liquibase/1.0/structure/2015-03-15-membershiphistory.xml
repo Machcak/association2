@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+                   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                   xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+   
+    <changeSet id="001" author="mbzowski">
+        <createTable tableName="membershiphistory">
+            <column name="ID" type="BIGINT" />
+            <column name="member_id" type="BIGINT" />
+            <column name="datefrom" type="DATE" />
+            <column name="dateto" type="DATE" />
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="002" author="mbzowski">
+         <addNotNullConstraint tableName="membershiphistory" 
+                              columnName="id"
+                              columnDataType="bigint"    />
+    </changeSet>
+    
+    <changeSet id="003" author="mbzowski">
+         <addNotNullConstraint tableName="membershiphistory" 
+                              columnName="member_id"
+                              columnDataType="bigint"    />
+    </changeSet>
+    
+    <changeSet id="004" author="mbzowski">
+         <addNotNullConstraint tableName="membershiphistory" 
+                              columnName="datefrom"
+                              columnDataType="DATE"    />
+    </changeSet>
+    
+     <changeSet id="005" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="membershiphistory" 
+                                 baseColumnNames="member_id" 
+                                 constraintName="fk_membershiphisotry_member" 
+                                 referencedTableName="associationmember" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+    <changeSet id="011" author="mbzowski">
+        <addPrimaryKey tableName="membershiphistory" columnNames="id" />
+    </changeSet>   
+    
+    <changeSet id="012" author="mbzowski">
+        <addAutoIncrement tableName="membershiphistory" columnName="id" columnDataType="BIGINT" />
+    </changeSet>
+    
+    <changeSet id="13" author="mbzowski">
+        <dropColumn tableName="associationmember" columnName="active" />
+    </changeSet>
+    
+    <changeSet id="14" author="mbzowski">
+        <dropColumn tableName="associationmember" columnName="since" />
+    </changeSet>
+    
+</databaseChangeLog>

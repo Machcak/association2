@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:machcak="http://xmlns.jcp.org/jsf/composite/machcak">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{text.ListMeetingTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="MeetingListForm" styleClass="odswiez_po_dodaniu_osob">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <p:panel header="#{text.ListMeetingTitle}">
+                    <p:dataTable id="datalist" value="#{meetingController.items}" var="item"
+                                 selectionMode="single" selection="#{meetingController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton addMemberButton  reportButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton addMemberButton  reportButton"/>
+
+                        <p:column style="width:16px">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.LeadershipType}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.leadership.leadershipType.type} #{item.leadership.number}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.ListMeetingTitle_number}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.number}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.ListMeetingTitle_description}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.description}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.meeting_date}" />
+                            </f:facet>
+                            <h:outputText value="#{item.dayOf}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:rowExpansion>                            
+                            <p:dataTable id="meetingresolutionlist" 
+                                         value="#{meetingController.selected.resolutions}" 
+                                         var="res" 
+                                         selectionMode="single" 
+                                         rowKey="res.id">
+                                <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_number}"/>
+                                </f:facet>
+                                <h:outputText value="#{res.number}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_content}"/>
+                                </f:facet>
+                                <h:outputText value="#{res.content}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{text.ListResolutionTitle_dayOfResolution}"/>
+                                </f:facet>
+                                <h:outputText value="#{res.dayOfResolution}">
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            </p:dataTable>
+                        </p:rowExpansion>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{text.create}" actionListener="#{meetingController.prepareCreate}" update=":MeetingCreateForm" oncomplete="PF('MeetingCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{text.View}" update=":MeetingViewForm" oncomplete="PF('MeetingViewDialog').show()" disabled="#{empty meetingController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{text.Edit}" update=":MeetingEditForm" oncomplete="PF('MeetingEditDialog').show()" disabled="#{empty meetingController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{text.Delete}" actionListener="#{meetingController.destroy}" update=":growl,datalist" disabled="#{empty meetingController.selected}"/>
+                            <p:commandButton id="addMemberButton" icon="ui-icon-plus" value="#{text.Members}" actionListener="#{meetingController.prepareAddMember}" update=":#{p:component('LeadershipAddMemberForm')}" oncomplete="PF('AddMemberDialog').show()" disabled="#{empty meetingController.selected}"/>
+                            <p:commandButton id="reportButton" 
+                                             icon="ui-icon-plus" 
+                                             value="#{text.Report}" 
+                                             actionListener="#{meetingController.prepareReport}" 
+                                             update=":#{p:component('CKEditorForm')}" 
+                                             oncomplete="PF('CKEditor').show()" 
+                                             disabled="#{empty meetingController.selected}"/>
+                        </f:facet>
+                        <p:rowExpansion>
+                            <p:dataTable  id="datalist-resolutions" value="#{meetingController.selected.resolutions}" var="rr"
+                                          selectionMode="single" 
+                                          rowKey="#{rr.id}"
+                                          >
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{text.Leadership}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{rr.number}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{text.Content}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{rr.content}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <machcak:manageMembers 
+                leadershipMembers="#{meetingController.meetingMembers}" 
+                saveMembers="#{meetingController.saveMembers()}"/>
+            <machcak:CKEditor
+                content="#{meetingController.meetingReportContent}" 
+                saveListener="#{meetingController.saveListener}"
+                associationMember="#{meetingController.report.associationMember}"
+                associationMembers="#{meetingController.associationMembers}"
+                myattributeUpdatedEventListener="#{meetingController.changeMember}"/>
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+
+        </ui:define>
+    </ui:composition>
+
+</html>

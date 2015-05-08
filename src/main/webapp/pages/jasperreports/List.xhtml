@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/template.xhtml">
+
+
+	<ui:define name="title">
+		<h:outputText value="#{text.reports}"></h:outputText>
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="JasperReportsListForm" target="_blank">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			<p:panel header="#{text.reports}">
+				<p:growl id="growl" showDetail="true" />
+				<p:selectOneMenu id="caseSelection" value="#{reportsBean.value}">
+					<f:selectItem itemLabel="Bilans miesięczny całościowy" itemValue="bilans_miesieczny_calosciowy" />
+					<f:selectItem itemLabel="Bilans miesięczny elektroniczny" itemValue="bilans_miesieczny_elektroniczny" />
+					<f:selectItem itemLabel="Bilans miesięczny fizyczny" itemValue="bilans_miesieczny_fizyczny" />
+					<f:selectItem itemLabel="Bilans roczny całościowy" itemValue="bilans_roczny_calosciowy" />
+					<f:selectItem itemLabel="Bilans roczny elektroniczny" itemValue="bilans_roczny_elektroniczny" />
+					<f:selectItem itemLabel="Bilans roczny fizyczny" itemValue="bilans_roczny_fizyczny" />
+					<f:selectItem itemLabel="Osoby, które nie opłaciły miesiąca" itemValue="osoby_ktore_nie_oplacily_miesiaca" />
+					<f:selectItem itemLabel="Składki za miesiąc" itemValue="skladki_za_miesiac" />
+					<f:selectItem itemLabel="Wydatki za okres" itemValue="wydatki_za_okres" />
+					<f:selectItem itemLabel="Zestawienie finansowe" itemValue="zestawienie_finansowe" />
+					<f:selectItem itemLabel="Zestawienie finansowe bez składek" itemValue="zestawienie_finansowe_bez_skladek" />
+
+					<p:ajax event="change" update="switch" process="@this" />
+				</p:selectOneMenu>
+
+				<p:separator />
+				<pe:switch id="switch" value="#{reportsBean.value}">
+					<pe:defaultCase>  
+				        Case: Default  
+				    </pe:defaultCase>
+
+					<pe:case value="bilans_miesieczny_calosciowy">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="bilans_miesieczny_elektroniczny">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="bilans_miesieczny_fizyczny">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="bilans_roczny_calosciowy">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="bilans_roczny_elektroniczny">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="bilans_roczny_fizyczny">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="osoby_ktore_nie_oplacily_miesiaca">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="skladki_za_miesiac">
+						<p:outputLabel value="#{text.balanceterm}" for="balanceterm" />
+						<p:spinner id="balanceterm" value="#{reportsBean.balanceterm}" />
+					</pe:case>
+
+					<pe:case value="wydatki_za_okres">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="zestawienie_finansowe">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+
+					<pe:case value="zestawienie_finansowe_bez_skladek">
+						<p:outputLabel value="#{text.datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.datefrom}" title="#{text.datefrom}" required="true" requiredMessage="#{text.datefromrequired}" showOn="button"/>
+                        <p:outputLabel value="#{text.dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy" mask="true" value="#{reportsBean.dateto}" title="#{text.dateto}" required="true" requiredMessage="#{text.datetorequired}" showOn="button"/>
+					</pe:case>
+				</pe:switch>
+				<p:separator />
+				<h:outputLabel>Export Report</h:outputLabel>
+				<h:selectOneRadio value="#{reportsBean.exportOption}">
+					<f:selectItem itemValue="PDF" itemLabel="PDF" />
+					<f:selectItem itemValue="HTML" itemLabel="HTML" />
+					<f:selectItem itemValue="EXCEL" itemLabel="EXCEL" />
+					<f:selectItem itemValue="RTF" itemLabel="RTF" />
+				</h:selectOneRadio>
+				<h:commandButton action="#{reportsBean.execute}" value="Get Report" />
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ResolutionCreateDlg" widgetVar="ResolutionCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.resolution}">
+            <h:form id="ResolutionCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{resolutionController.selected != null}">
+                        <p:outputLabel value="#{text.CreateResolutionLabel_number}" for="number" />
+                        <p:inputText id="number" value="#{resolutionController.selected.number}" title="#{text.CreateResolutionTitle_number}" />
+                        <p:outputLabel value="#{text.CreateResolutionLabel_content}" for="content" />
+                        <p:inputText id="content" value="#{resolutionController.selected.content}" title="#{text.CreateResolutionTitle_content}" />
+                        <p:outputLabel value="#{text.CreateResolutionLabel_dayOfResolution}" for="dayOfResolution" />
+                        <p:calendar id="dayOfResolution" pattern="dd.MM.yyyy"  mask="true" value="#{resolutionController.selected.dayOfResolution}" title="#{text.EditResolutionTitle_dayOfResolution}"  showOn="button"/>
+                        <p:outputLabel value="#{text.Leadership}" for="leadershipSelectOneField" />
+                        <p:selectOneMenu id="leadershipSelectOneField" value="#{resolutionController.selected.leadership}" >
+                        	<f:selectItems	value="#{leadershipController.items}"
+                        					var="leadershipVar"
+                        					itemValue="#{leadershipVar}" 
+                        					itemLabel="#{leadershipVar.leadershipType.type} #{leadershipVar.number}">	
+                        	</f:selectItems>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{text.meeting}" for="meetingSelectOneField" />
+                        <p:selectOneMenu id="meetingSelectOneField" value="#{resolutionController.selected.meeting}" >
+                        	<f:selectItems	value="#{meetingController.items}"
+                        					var="meetingVar"
+                        					itemValue="#{meetingVar}" 
+                        					itemLabel="#{meetingVar.description}">	
+                        	</f:selectItems>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{resolutionController.create}" value="#{text.Save}" update="display,:ResolutionListForm:datalist,:growl" oncomplete="handleSubmit(args,'ResolutionCreateDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="ResolutionCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+                   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                   xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+  
+    <changeSet id="001" author="mbzowski">
+        <createTable tableName="associationmember">
+            <column name="ID" type="BIGINT" />
+            <column name="ACTIVE" type="BOOLEAN"  />
+            <column name="FIRSTNAME" type="VARCHAR(255)" />
+            <column name="LASTNAME" type="VARCHAR(255)" />
+            <column name="SINCE" type="DATE" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="002" author="mbzowski">
+        <addPrimaryKey tableName="associationmember"
+                       columnNames="id" 
+                       constraintName="pk_associationmember_id"/>
+    </changeSet>
+    
+    <changeSet id="003" author="mbzowski">
+        <addAutoIncrement tableName="associationmember" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="004" author="mbzowski">
+        <addNotNullConstraint tableName="associationmember" 
+                              columnName="ACTIVE" 
+                              columnDataType="BOOLEAN"/>
+    </changeSet>
+    
+    <changeSet id="005" author="mbzowski">
+        <addNotNullConstraint tableName="associationmember" 
+                              columnName="FIRSTNAME" 
+                              columnDataType="VARCHAR(255)"/>
+    </changeSet>
+    
+    <changeSet id="006" author="mbzowski">
+        <addNotNullConstraint tableName="associationmember" 
+                              columnName="LASTNAME" 
+                              columnDataType="VARCHAR(255)"/>
+    </changeSet>
+    
+    <changeSet id="007" author="mbzowski">
+        <addNotNullConstraint tableName="associationmember" 
+                              columnName="SINCE"
+                              columnDataType="DATE"        />
+    </changeSet>
+        
+    <changeSet id="008" author="mbzowski">
+        <createTable tableName="event">
+            <column name="ID" type="BIGINT" />
+            <column name="DESCRIPTION" type="VARCHAR(1000)" />
+            <column name="TITLE" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="009" author="mbzowski">
+        <addPrimaryKey tableName="event"
+                       columnNames="id" 
+                       constraintName="pk_event_id"/>
+    </changeSet>
+    
+    <changeSet id="010" author="mbzowski">
+        <addAutoIncrement tableName="event" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+        
+    <changeSet id="011" author="mbzowski">
+        <addNotNullConstraint tableName="event" 
+                              columnName="TITLE"
+                              columnDataType="VARCHAR(255)"        />
+    </changeSet>
+    
+    <changeSet id="012" author="mbzowski">
+        <createTable tableName="leadership" >
+            <column name="ID"  type="BIGINT" />
+            <column name="CONTINUESTO"  type="DATE" />
+            <column name="NUMBER"  type="VARCHAR(255)" />
+            <column name="SINCE"  type="DATE" />
+            <column name="TYPE"  type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="013" author="mbzowski">
+        <addPrimaryKey tableName="leadership"
+                       columnNames="id" 
+                       constraintName="pk_leadership_id"/>
+    </changeSet>
+    
+    <changeSet id="014" author="mbzowski">
+        <addAutoIncrement tableName="leadership" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="015" author="mbzowski">
+        <createTable tableName="leadershipmember">
+            <column name="ID"  type="BIGINT" />
+            <column name="LEADERSHIP_ID"  type="BIGINT" />
+            <column name="MEMBER_ID"  type="BIGINT" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="016" author="mbzowski">
+        <addPrimaryKey tableName="leadershipmember"
+                       columnNames="id" 
+                       constraintName="pk_leadershipmember_id"/>
+    </changeSet>
+    
+    <changeSet id="017" author="mbzowski">
+        <addAutoIncrement tableName="leadershipmember" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="018" author="mbzowski">
+        
+    </changeSet>
+               
+     <changeSet id="019" author="mbzowski">
+        <createTable tableName="meeting">
+            <column name="ID" type="BIGINT" />
+            <column name="DESCRIPTION" type="VARCHAR(255)" />
+            <column name="NUMBER" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="020" author="mbzowski">
+        <addPrimaryKey tableName="meeting"
+                       columnNames="id" 
+                       constraintName="pk_meeting_id"/>
+    </changeSet>
+    
+    <changeSet id="021" author="mbzowski">
+        <addAutoIncrement tableName="meeting" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="022" author="mbzowski">
+        <addNotNullConstraint tableName="meeting" 
+                              columnName="DESCRIPTION" 
+                              columnDataType="DATE"/>
+    </changeSet>
+    
+    <changeSet id="023" author="mbzowski">
+        <addNotNullConstraint tableName="meeting" 
+                              columnName="NUMBER" 
+                              columnDataType="VARCHAR(255)"/>
+    </changeSet>
+                 
+    <changeSet id="024" author="mbzowski">
+        <createTable tableName="report">
+            <column name="ID" type="BIGINT" />
+            <column name="DATEOF" type="DATE" />
+            <column name="TITLE" type="VARCHAR(255)" />
+            <column name="REPORT" type="VARCHAR(255)" />
+            <column name="ASSOCIATIONMEMBER_ID" type="BIGINT" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="025" author="mbzowski">
+        <addPrimaryKey tableName="report"
+                       columnNames="id" 
+                       constraintName="pk_report_id"/>
+    </changeSet>
+    
+    <changeSet id="026" author="mbzowski">
+        <addAutoIncrement tableName="report" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="027" author="mbzowski">
+        <addForeignKeyConstraint baseTableName="report" 
+                                 baseColumnNames="ASSOCIATIONMEMBER_ID" 
+                                 constraintName="fk_report_associationmember" 
+                                 referencedTableName="associationmember" 
+                                 referencedColumnNames="id" />
+    </changeSet>
+    
+    <changeSet id="028" author="mbzowski">
+        <addNotNullConstraint tableName="report" 
+                              columnName="dateof" 
+                              columnDataType="DATE"/>
+    </changeSet>
+    
+        <changeSet id="029" author="mbzowski">
+        <addNotNullConstraint tableName="report" 
+                              columnName="TITLE" 
+                              columnDataType="VARCHAR(255)"/>
+    </changeSet>
+           
+     <changeSet id="030" author="mbzowski">
+        <createTable tableName="resolution">
+            <column name="ID" type="BIGINT" />
+            <column name="CONTENT" type="VARCHAR(255)" />
+            <column name="DAYOFRESOLUTION" type="DATE" />
+            <column name="NUMBER" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>   
+    
+    <changeSet id="031" author="mbzowski">
+        <addPrimaryKey tableName="resolution"
+                       columnNames="id" 
+                       constraintName="pk_resolution_id"/>
+    </changeSet>
+    
+    <changeSet id="032" author="mbzowski">
+        <addAutoIncrement tableName="resolution" 
+                          columnName="id" 
+                          columnDataType="BIGINT"/>
+    </changeSet>
+    
+    <changeSet id="033" author="mbzowski">
+        <addNotNullConstraint tableName="resolution" 
+                              columnName="DAYOFRESOLUTION" 
+                              columnDataType="DATE"/>
+    </changeSet>
+    
+    <changeSet id="034" author="mbzowski">
+        <addNotNullConstraint tableName="resolution" 
+                              columnName="NUMBER" 
+                              columnDataType="VARCHAR(255)"/>
+    </changeSet>
+    
+</databaseChangeLog>

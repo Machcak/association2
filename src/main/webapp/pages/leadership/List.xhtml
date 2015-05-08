@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:machcak="http://xmlns.jcp.org/jsf/composite/machcak">
+    
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{text.list_leadership_title}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            
+            <h:form id="LeadershipListForm" styleClass="odswiez_po_dodaniu_osob">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <p:panel header="#{text.list_leadership_title}">
+                    <p:dataTable id="datalist" value="#{leadershipController.items}" var="item"
+                                 selectionMode="single" selection="#{leadershipController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton addMemberButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton addMemberButton"/>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.leadership_type}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.leadershipType.type}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.leadership_term_number}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.number}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.since}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.since}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.continues_to}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.continuesTo}">
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{text.create}" actionListener="#{leadershipController.prepareCreate}" update=":LeadershipCreateForm" oncomplete="PF('LeadershipCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{text.View}" update=":LeadershipViewForm" oncomplete="PF('LeadershipViewDialog').show()" disabled="#{empty leadershipController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{text.Edit}" update=":LeadershipEditForm" oncomplete="PF('LeadershipEditDialog').show()" disabled="#{empty leadershipController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{text.Delete}" actionListener="#{leadershipController.destroy}" update=":growl,datalist" disabled="#{empty leadershipController.selected}"/>
+                            <p:commandButton id="addMemberButton" icon="ui-icon-plus" value="#{text.members}" actionListener="#{leadershipController.prepareAddMember}" update=":#{p:component('LeadershipAddMemberForm')}" oncomplete="PF('AddMemberDialog').show()" disabled="#{empty leadershipController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+           
+            <machcak:manageMembers 
+                leadershipMembers="#{leadershipController.leadershipMembers}" 
+                saveMembers="#{leadershipController.saveMembers()}"/>
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

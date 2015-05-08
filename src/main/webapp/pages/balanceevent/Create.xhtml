@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BalanceeventCreateDlg" widgetVar="BalanceeventCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.CreateBalanceeventTitle}">
+            <h:form id="BalanceeventCreateForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{balanceeventController.selected != null}">
+                        <p:outputLabel value="#{text.CreateBalanceeventLabel_eventname}" for="eventname" />
+                        <p:inputText id="eventname" value="#{balanceeventController.selected.eventname}" title="#{text.CreateBalanceeventTitle_eventname}" required="true" requiredMessage="#{text.CreateBalanceeventRequiredMessage_eventname}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{balanceeventController.create}" value="#{text.Save}" update="display,:BalanceeventListForm:datalist,:growl" oncomplete="handleSubmit(args,'BalanceeventCreateDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="BalanceeventCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

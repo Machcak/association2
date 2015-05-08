@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ResolutionEditDlg" widgetVar="ResolutionEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.EditResolutionTitle}">
+            <h:form id="ResolutionEditForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{resolutionController.selected != null}">
+                        <p:outputLabel value="#{text.EditResolutionLabel_number}" for="number" />
+                        <p:inputText id="number" value="#{resolutionController.selected.number}" title="#{text.EditResolutionTitle_number}" />
+                        <p:outputLabel value="#{text.EditResolutionLabel_content}" for="content" />
+                        <p:inputText id="content" value="#{resolutionController.selected.content}" title="#{text.EditResolutionTitle_content}" />
+                        <p:outputLabel value="#{text.EditResolutionLabel_dayOfResolution}" for="dayOfResolution" />
+                        <p:calendar id="dayOfResolution" pattern="dd.MM.yyyy"  mask="true" value="#{resolutionController.selected.dayOfResolution}" title="#{text.EditResolutionTitle_dayOfResolution}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{resolutionController.update}" value="#{text.Save}" update="display,:ResolutionListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ResolutionEditDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="ResolutionEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

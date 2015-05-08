@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="zestawienie_finansowe_bez_skladek" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3281078f-dd5f-4f06-b7cb-6c230ef7ba98">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="association"/>
+	<style name="Style1" fontName="DejaVu Sans"/>
+	<parameter name="datefrom" class="java.util.Date"/>
+	<parameter name="dateto" class="java.util.Date"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto = DATE_FORMAT($P{dateto},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': Bank: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
+FROM balance b 
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate <= DATE_FORMAT($P{dateto},'%Y-%m-%d')
+AND  (it.title = 'Konto'  or it.title = 'Operacja na bankomacie'  )
+
+UNION
+SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto = DATE_FORMAT($P{dateto},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': Kasa: ', COALESCE(SUM(if(it.title = 'Operacja na bankomacie', amount * -1, amount)), 0) , ' zł.') as dane
+FROM balance b 
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate <= DATE_FORMAT($P{dateto},'%Y-%m-%d')
+AND  (it.title = 'Kasa'  or it.title = 'Operacja na bankomacie'  )]]>
+	</queryString>
+	<field name="dane" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement style="Style1" x="0" y="0" width="100" height="20" uuid="b80139f8-22f0-4b47-aef6-5a160121472c"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stan konta]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Style1" x="380" y="0" width="170" height="20" uuid="59cfb78f-9feb-4bc8-827d-033e6af0f91f">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Wojkowice Kościelne, " + DATEFORMAT(new java.util.Date(),"dd.MM.yyyy")]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="80" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<subreport>
+				<reportElement style="Style1" x="-20" y="0" width="200" height="80" uuid="33de7b7a-5ea4-4d7c-8519-079507371157">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<subreportParameter name="datefrom">
+					<subreportParameterExpression><![CDATA[$P{datefrom}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="dateto">
+					<subreportParameterExpression><![CDATA[$P{dateto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["pozostalo_wplynelo_podraport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement style="Style1" x="0" y="0" width="180" height="20" uuid="ecb48009-a404-4afc-890a-135dcbdf5258">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{dane}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField evaluationTime="Report">
+				<reportElement x="50" y="0" width="100" height="20" uuid="9a2b0e04-dac2-497f-8330-33ac934f8f2b">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" z " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-50" y="0" width="100" height="20" uuid="abaf4ab4-dc97-4743-98d4-204340712367">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Strona " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="180" y="0" width="204" height="20" uuid="023c09ff-fce7-4960-b10d-88794e6a85f8">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Wydrukowano o godzinie: " + DATEFORMAT(new java.util.Date(), "HH:mm")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>

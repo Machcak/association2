@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LeadershipMemberViewDlg" widgetVar="LeadershipMemberViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewLeadershipMemberTitle}">
+            <h:form id="LeadershipMemberViewForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{leadershipMemberController.selected != null}">
+                        <h:outputText value="#{bundle.ViewLeadershipMemberLabel_leadership}"/>
+                        <h:outputText value="#{leadershipMemberController.selected.leadership}" title="#{bundle.ViewLeadershipMemberTitle_leadership}"/>
+                        <h:outputText value="#{bundle.ViewLeadershipMemberLabel_member}"/>
+                        <h:outputText value="#{leadershipMemberController.selected.member}" title="#{bundle.ViewLeadershipMemberTitle_member}"/>
+                        <h:outputText value="#{bundle.ViewLeadershipMemberLabel_id}"/>
+                        <h:outputText value="#{leadershipMemberController.selected.id}" title="#{bundle.ViewLeadershipMemberTitle_id}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="LeadershipMemberViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

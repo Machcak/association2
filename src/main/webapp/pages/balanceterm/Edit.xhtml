@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BalancetermEditDlg" widgetVar="BalancetermEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{text.EditBalancetermTitle}">
+            <h:form id="BalancetermEditForm">
+            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{balancetermController.selected != null}">
+                        <p:outputLabel value="#{text.EditBalancetermLabel_termname}" for="termname" />
+                        <p:inputText id="termname" value="#{balancetermController.selected.termname}" title="#{text.EditBalancetermTitle_termname}" required="true" requiredMessage="#{text.EditBalancetermRequiredMessage_termname}"/>
+                        <p:outputLabel value="#{text.EditBalancetermLabel_datefrom}" for="datefrom" />
+                        <p:calendar id="datefrom" pattern="dd.MM.yyyy"  mask="true" value="#{balancetermController.selected.datefrom}" title="#{text.EditBalancetermTitle_datefrom}" required="true" requiredMessage="#{text.EditBalancetermRequiredMessage_datefrom}" showOn="button"/>
+                        <p:outputLabel value="#{text.EditBalancetermLabel_dateto}" for="dateto" />
+                        <p:calendar id="dateto" pattern="dd.MM.yyyy"  mask="true" value="#{balancetermController.selected.dateto}" title="#{text.EditBalancetermTitle_dateto}" required="true" requiredMessage="#{text.EditBalancetermRequiredMessage_dateto}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{balancetermController.update}" value="#{text.Save}" update="display,:BalancetermListForm:datalist,:growl" oncomplete="handleSubmit(args, 'BalancetermEditDialog');"/>
+                    <p:commandButton value="#{text.Cancel}" onclick="BalancetermEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

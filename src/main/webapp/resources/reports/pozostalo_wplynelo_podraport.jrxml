@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pozostalo_wplynelo_podraport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="253695ac-71d8-4923-a40e-2fa2fd0a7395">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="association"/>
+	<style name="Style1" fontName="DejaVu Sans"/>
+	<parameter name="datefrom" class="java.util.Date"/>
+	<parameter name="dateto" class="java.util.Date"/>
+	
+	<queryString language="SQL">
+		<![CDATA[SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto < DATE_FORMAT($P{datefrom},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ),  ': pozostalo: ', COALESCE(SUM(amount), 0), ' zł.' ) as dane
+FROM balance b 
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate < DATE_FORMAT($P{datefrom},'%Y-%m-%d')
+AND  (it.title = 'Konto'  or it.title = 'Kasa'  )
+
+UNION 
+SELECT concat(( SELECT termname FROM balanceterm WHERE datefrom = DATE_FORMAT($P{datefrom},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': wpłynęło: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
+FROM balance b
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate between DATE_FORMAT($P{datefrom},'%Y-%m-%d') and DATE_FORMAT($P{dateto},'%Y-%m-%d')
+AND  (it.title = 'Konto'  or it.title = 'Kasa'  )
+AND b.amount > 0
+UNION
+SELECT concat(( SELECT termname FROM balanceterm WHERE datefrom = DATE_FORMAT($P{datefrom},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': wydano: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
+FROM balance b
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate between DATE_FORMAT($P{datefrom},'%Y-%m-%d') and DATE_FORMAT($P{dateto},'%Y-%m-%d')
+AND  (it.title = 'Konto'  or it.title = 'Kasa'  )
+AND b.amount < 0
+
+UNION
+SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto = $P{dateto} AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': pozostalo: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
+FROM balance b 
+JOIN incometo it on it.id = b.incometo_id
+JOIN balanceterm bt on bt.id = b.balanceterm_id
+WHERE incomingdate <= $P{dateto}
+AND  (it.title = 'Konto'  or it.title = 'Kasa'  )]]>
+	</queryString>
+	<field name="dane" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField evaluationTime="Auto">
+				<reportElement style="Style1" x="0" y="0" width="280" height="20" uuid="b2dc67d5-21e4-4400-b520-2ae878e3e888"/>
+				<textFieldExpression><![CDATA[$F{dane}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
