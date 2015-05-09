@@ -138,12 +138,37 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:datasources:2.0">
             <datasources>
-                <datasource jndi-name="java:jboss/datasources/MySQLDS" enabled="true" use-java-context="true" pool-name="MySQLDS" use-ccm="true">
-                	<connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
-                    <driver>mysql</driver>   
+                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                </datasource>
+                <datasource jndi-name="java:jboss/datasources/MySQLDS" enabled="${mysql.enabled}" use-java-context="true" pool-name="MySQLDS" use-ccm="true">
+                    <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
+                    <driver>mysql</driver>
                     <security>
                       <user-name>${env.OPENSHIFT_MYSQL_DB_USERNAME}</user-name>
-                      <password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</password
+                      <password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <background-validation>true</background-validation>
+                        <background-validation-millis>60000</background-validation-millis>
+                        <!--<validate-on-match>true</validate-on-match>-->
+                    </validation>
+                    <pool>
+                        <flush-strategy>IdleConnections</flush-strategy>
+                    </pool>
+                </datasource>
+                <datasource jndi-name="java:jboss/datasources/PostgreSQLDS" enabled="${postgresql.enabled}" use-java-context="true" pool-name="PostgreSQLDS" use-ccm="true">
+                    <connection-url>jdbc:postgresql://${env.OPENSHIFT_POSTGRESQL_DB_HOST}:${env.OPENSHIFT_POSTGRESQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
+                    <driver>postgresql</driver>
+                    <security>
+                      <user-name>${env.OPENSHIFT_POSTGRESQL_DB_USERNAME}</user-name>
+                      <password>${env.OPENSHIFT_POSTGRESQL_DB_PASSWORD}</password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
@@ -156,8 +181,14 @@
                     </pool>
                 </datasource>
                 <drivers>
+                    <driver name="h2" module="com.h2database.h2">
+                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                    </driver>
                     <driver name="mysql" module="com.mysql.jdbc">
                         <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+                    </driver>
+                    <driver name="postgresql" module="org.postgresql.jdbc">
+                        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -293,15 +324,15 @@
         <subsystem xmlns="urn:jboss:domain:jgroups:2.0" default-stack="tcp">
             <stack name="tcp">
                 <transport type="TCP" socket-binding="jgroups-tcp"> 
-                    <property name="external_addr">z-stspectrum.rhcloud.com</property>
-                    <property name="external_port">7600</property>
-                    <property name="bind_port">7600</property>
-                    <property name="bind_addr">127.12.167.129</property>
+                    <property name="external_addr">${env.OPENSHIFT_GEAR_DNS}</property>
+                    <property name="external_port">${env.OPENSHIFT_WILDFLY_CLUSTER_PROXY_PORT}</property>
+                    <property name="bind_port">${env.OPENSHIFT_WILDFLY_CLUSTER_PORT}</property>
+                    <property name="bind_addr">${env.OPENSHIFT_WILDFLY_IP}</property>
                     <property name="defer_client_bind_addr">true</property>
                 </transport>
                 <protocol type="TCPPING">
                     <property name="timeout">30000</property>
-                    <property name="initial_hosts">127.12.167.129[7600]</property>
+                    <property name="initial_hosts">${env.OPENSHIFT_WILDFLY_CLUSTER}</property>
                     <property name="port_range">0</property>
                     <property name="num_initial_members">1</property>
                 </protocol>
@@ -315,7 +346,7 @@
                 <protocol type="AUTH">
                         <property name="auth_class">org.jgroups.auth.MD5Token</property>
                         <property name="token_hash">SHA</property>
-                        <property name="auth_value">8_2fy6_PuTHWjZ7FQ2ALwh1lD3qcvz2NpS6XlbOPee8L73qreQp-Y2OwANfWrr6rK7ix_umZjzDfy1V_Fhm3Aa9kGObLbRDIEqlstbeYPMoTXtjoGRGp3KfFCApVRA7h</property>
+                        <property name="auth_value">${env.OPENSHIFT_SECRET_TOKEN}</property>
                 </protocol>
                 <protocol type="pbcast.GMS"/>
                 <protocol type="UFC"/>
@@ -343,8 +374,8 @@
         <subsystem xmlns="urn:jboss:domain:messaging:2.0">
             <hornetq-server>
                 <journal-file-size>102400</journal-file-size>
-                <thread-pool-max-size>50</thread-pool-max-size>
-                <scheduled-thread-pool-max-size>5</scheduled-thread-pool-max-size>
+                <thread-pool-max-size>${messaging.thread.pool.max.size}</thread-pool-max-size>
+                <scheduled-thread-pool-max-size>${messaging.scheduled.thread.pool.max.size}</scheduled-thread-pool-max-size>
                 <connectors>
                     <http-connector name="http-connector" socket-binding="http">
                         <param key="http-upgrade-endpoint" value="http-acceptor"/>
@@ -498,16 +529,24 @@
     </profile>
     <interfaces>
         <interface name="management">
-            <loopback-address value="127.12.167.129"/>
+            <loopback-address value="${env.OPENSHIFT_WILDFLY_IP}"/>
         </interface>
         <interface name="public">
-            <loopback-address value="127.12.167.129"/>
+            <loopback-address value="${env.OPENSHIFT_WILDFLY_IP}"/>
+        </interface>
+        <!-- TODO - only show this if the jacorb subsystem is added  -->
+        <interface name="unsecure">
+            <!--
+              ~  Used for IIOP sockets in the standard configuration.
+              ~                  To secure JacORB you need to setup SSL 
+              -->
+            <inet-address value="${env.OPENSHIFT_WILDFLY_IP}"/>
         </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
         <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
         <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
-        <socket-binding name="jgroups-tcp" port="7600"/>
+        <socket-binding name="jgroups-tcp" port="${env.OPENSHIFT_WILDFLY_CLUSTER_PORT}"/>
         <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
         <socket-binding name="http" port="${jboss.http.port:8080}"/>
         <socket-binding name="https" port="${jboss.https.port:8443}"/>
