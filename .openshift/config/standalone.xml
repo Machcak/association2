@@ -503,14 +503,6 @@
         <interface name="public">
             <loopback-address value="127.12.167.129"/>
         </interface>
-        <!-- TODO - only show this if the jacorb subsystem is added  -->
-        <interface name="unsecure">
-            <!--
-              ~  Used for IIOP sockets in the standard configuration.
-              ~                  To secure JacORB you need to setup SSL 
-              -->
-            <inet-address value="127.12.167.129"/>
-        </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
         <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
