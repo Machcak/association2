@@ -32,6 +32,14 @@
                         <p:column style="width:16px">
                             <p:rowToggler />
                         </p:column>
+						<p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{text.meeting_date}" />
+                            </f:facet>
+                            <h:outputText value="#{item.dayOf}" >
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                            </h:outputText>
+                        </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{text.LeadershipType}"/>
@@ -49,14 +57,6 @@
                                 <h:outputText value="#{text.ListMeetingTitle_description}"/>
                             </f:facet>
                             <h:outputText value="#{item.description}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{text.meeting_date}" />
-                            </f:facet>
-                            <h:outputText value="#{item.dayOf}" >
-                                <f:convertDateTime pattern="dd.MM.yyyy" />
-                            </h:outputText>
                         </p:column>
                         <p:rowExpansion>                            
                             <p:dataTable id="meetingresolutionlist" 

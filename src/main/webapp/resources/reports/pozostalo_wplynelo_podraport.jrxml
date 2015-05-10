@@ -7,7 +7,7 @@
 	<parameter name="dateto" class="java.util.Date"/>
 	
 	<queryString language="SQL">
-		<![CDATA[SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto < DATE_FORMAT($P{datefrom},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ),  ': pozostalo: ', COALESCE(SUM(amount), 0), ' zł.' ) as dane
+		<![CDATA[SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto < DATE_FORMAT($P{datefrom},'%Y-%m-%d') AND termtype = 0 ORDER BY dateto desc LIMIT 1 ),  ': pozostało: ', COALESCE(SUM(amount), 0), ' zł.' ) as dane
 FROM balance b 
 JOIN incometo it on it.id = b.incometo_id
 JOIN balanceterm bt on bt.id = b.balanceterm_id
@@ -32,7 +32,7 @@ AND  (it.title = 'Konto'  or it.title = 'Kasa'  )
 AND b.amount < 0
 
 UNION
-SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto = $P{dateto} AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': pozostalo: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
+SELECT CONCAT(( SELECT termname FROM balanceterm WHERE dateto = $P{dateto} AND termtype = 0 ORDER BY dateto desc LIMIT 1 ), ': pozostało: ', COALESCE(SUM(amount), 0) , ' zł.') as dane
 FROM balance b 
 JOIN incometo it on it.id = b.incometo_id
 JOIN balanceterm bt on bt.id = b.balanceterm_id
