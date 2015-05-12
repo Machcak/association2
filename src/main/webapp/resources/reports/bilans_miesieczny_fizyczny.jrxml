@@ -25,7 +25,7 @@ FROM(
 												  WHERE incomingdate < DATE_FORMAT($P{datefrom},'%Y-%m-%d')
 												  AND  (it.title = 'Kasa'  or it.title = 'Operacja na bankomacie'  or  it.title = 'Bilans Otwarcia Miesiąca')
 												  ) 
-  ) c 
+  ) c
 ORDER BY incomingdate, priority desc, amount desc]]>
 	</queryString>
 	<field name="incomingdate" class="java.sql.Date">
