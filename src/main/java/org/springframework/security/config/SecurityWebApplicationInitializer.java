@@ -12,4 +12,5 @@ public class SecurityWebApplicationInitializer
     public SecurityWebApplicationInitializer() {
         super(SecurityConfig.class);
     }
+    
 }

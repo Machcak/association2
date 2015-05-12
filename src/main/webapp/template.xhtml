@@ -27,32 +27,32 @@
                         <p:menuitem value="#{text.menuHome}" outcome="/index" icon="ui-icon-home"/>
                         <p:submenu label="#{text.menuDefinitions}">
                             <p:submenu label="#{text.submenuDefinitionsLeaderships}">
-                            	<p:menuitem value="#{text.menuLeadershipTypes}" outcome="/pages/leadershipType/List.xhtml" />
+                            	<p:menuitem value="#{text.menuLeadershipTypes}" outcome="/definitions/leadershipType/List.xhtml" />
                             </p:submenu>
                             <p:submenu label="#{text.submenuDefinitionsReports}">
-                            	<p:menuitem value="#{text.menuReportTypes}" outcome="/pages/reportType/List.xhtml" />
+                            	<p:menuitem value="#{text.menuReportTypes}" outcome="/definitions/reportType/List.xhtml" />
                             </p:submenu>
                             <p:submenu label="#{text.submenuDefinitionsFinance}">
-                            	<p:menuitem value="#{text.menuIncomeTo}" outcome="/pages/incometo/List.xhtml" />
+                            	<p:menuitem value="#{text.menuIncomeTo}" outcome="/definitions/incometo/List.xhtml" />
+                            	<p:menuitem value="#{text.balanceEvents}" outcome="/definitions/balanceevent/List.xhtml" />
+                            	<p:menuitem value="#{text.balanceTerms}" outcome="/definitions/balanceterm/List.xhtml" />
                         	</p:submenu>
                         </p:submenu>
                         <p:submenu label="#{text.menuKadrowosc}">
-							<p:menuitem value="#{text.menuAssociationMember}" outcome="/pages/associationMember/List.xhtml" />
-                            <p:menuitem value="#{text.menuMembersHistory}" outcome="/pages/membershiphistory/List.xhtml" />
-							<p:menuitem value="#{text.menuAssociationLeaderships}" outcome="/pages/leadership/List.xhtml" />
+							<p:menuitem value="#{text.menuAssociationMember}" outcome="/members/associationMember/List.xhtml" />
+                            <p:menuitem value="#{text.menuMembersHistory}" outcome="/members/membershiphistory/List.xhtml" />
+							<p:menuitem value="#{text.menuAssociationLeaderships}" outcome="/members/leadership/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="#{text.menuDiaries}">
-                            <p:menuitem value="#{text.menuMeetings}" outcome="/pages/meeting/List.xhtml" />
-                            <p:menuitem value="#{text.menuResolutions}" outcome="/pages/resolution/List.xhtml" />
+                            <p:menuitem value="#{text.menuMeetings}" outcome="/association/meeting/List.xhtml" />
+                            <p:menuitem value="#{text.menuResolutions}" outcome="/association/resolution/List.xhtml" />
                             <p:menuitem value="#{text.menuReports}" outcome="/pages/report/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="#{text.menuOrganize}">
-                            <p:menuitem value="#{text.menuEvents}" outcome="/pages/event/List.xhtml" />
+                            <p:menuitem value="#{text.menuEvents}" outcome="/association/event/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="#{text.menuFinance}">
-                            <p:menuitem value="#{text.balance}" outcome="/pages/balance/List.xhtml" />
-                            <p:menuitem value="#{text.balanceEvents}" outcome="/pages/balanceevent/List.xhtml" />
-                            <p:menuitem value="#{text.balanceTerms}" outcome="/pages/balanceterm/List.xhtml" />
+                            <p:menuitem value="#{text.balance}" outcome="/finances/balance/List.xhtml" />
                         </p:submenu>
                         <p:menuitem value="#{text.menuReports}" outcome="/pages/jasperreports/List.xhtml" />
                     </p:menubar>
