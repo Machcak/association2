@@ -8,9 +8,9 @@ whenNoDataType="AllSectionsNoDetail" >
 	<parameter isForPrompting="true" name="dateto" class="java.util.Date"/>
 	
 	<queryString language="SQL">
-		<![CDATA[SELECT o.*,  ROUND((@amounttotal := if(title = 'Operacja na bankomacie', amount + @amounttotal, (amount * -1)  + @amounttotal) ),2) as amounttotal
+		<![CDATA[SELECT o.*,  ROUND((@amounttotal := if(title = 'Operacja na bankomacie', (amount * -1)  + @amounttotal, amount + @amounttotal) ),2) as amounttotal
 FROM(
-			SELECT b.id,  incomingdate, eventname, if(eventname='Składka' or eventname='Bilans otwarcia' or eventname='Kara za zwłokę w opłaceniu składki', t.termname, null) as termname, lastname, firstname,  amount, incometo_id, it.priority, it.title
+			SELECT b.id,  incomingdate, eventname, if(eventname='Składka' or eventname='Bilans otwarcia' or eventname='Kara za zwłokę w opłaceniu składki', t.termname, null) as termname, lastname, firstname,  if(incometo_id = 4 , (amount * -1)  , amount ) as amount, incometo_id, it.priority, it.title
 			FROM balance b 
 			JOIN balanceevent e on b.balanceevent_id = e.id 
 			LEFT JOIN associationmember m on m.id = b.member_id 
