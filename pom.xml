@@ -118,7 +118,7 @@
                 <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <outputDirectory>deployments</outputDirectory>
+                    <outputDirectory>${OPENSHIFT_WILDFLY_DIR}/standalone/deployments/</outputDirectory>
                     <warName>ROOT</warName>
                 </configuration>
             </plugin>
